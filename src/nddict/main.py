@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # http://stackoverflow.com/a/6190500/562769
-from typing import Callable, Hashable, Union
+from typing import Hashable, Union
 from collections.abc import Iterable
 import six
 
@@ -39,9 +39,22 @@ def issequence(arg) -> bool:
 
 class DeepDict(dict):
     """
-    An ordered and nested dictionary class. It can be a drop-in replacement for
-    the bulit-in dictionary type, but it's more capable as it handles
-    nested dictionaries. See the documentation for examples.
+    An nested dictionary class with a self-replicating default factory. 
+    It can be a drop-in replacement for the bulit-in dictionary type, 
+    but it's more capable as it handles nested layouts.
+    
+    Examples
+    --------
+    Basic usage:
+    
+    >>> from nddict import DeepDict
+    >>> d = {'a' : {'aa' : {'aaa' : 0}}, 'b' : 1, 'c' : {'cc' : 2}}
+    >>> dd = DeepDict(d)
+    >>> list(dd.values(deep=True))
+    [0, 1, 2]
+    
+    See the docs for more use cases!
+        
     """
     
     def __init__(self, *args, parent=None, root=None, locked=None, **kwargs):
@@ -66,7 +79,7 @@ class DeepDict(dict):
             A `None` value means that in terms of locking, the state of the object 
             is inherited from its parent. Default is `None`.
 
-        **kargs : tuple, Optional
+        **kwargs : tuple, Optional
             Extra keyword arguments are forwarded to the `dict` class.
 
         """
@@ -83,7 +96,7 @@ class DeepDict(dict):
         object is the root.
         """
         return self._key
-    
+           
     @property
     def locked(self) -> bool:
         """
@@ -149,7 +162,7 @@ class DeepDict(dict):
     def containers(self, *args, inclusive=False, deep=True, dtype=None, **kwargs):
         """
         Returns all the containers in a nested layout. A dictionary in a nested layout
-        is called a container, Only if it contains other containers (it is a parent). 
+        is called a container, only if it contains other containers (it is a parent). 
 
         Parameters
         ----------
@@ -238,7 +251,7 @@ class DeepDict(dict):
             raise KeyError("Missing key : {}".format(key))
         if issequence(key):
             if key[0] not in self:
-                self[key[0]] = value = self._default_factory()
+                self[key[0]] = value = self.__class__()
             else:
                 value = self[key[0]]
             if len(key) > 1:
@@ -246,7 +259,7 @@ class DeepDict(dict):
             else:
                 return value
         else:
-            self[key] = value = self._default_factory()
+            self[key] = value = self.__class__()
             return value
         
     def __reduce__(self):
@@ -255,11 +268,7 @@ class DeepDict(dict):
     def __repr__(self):
         frmtstr = self.__class__.__name__ + '(%s)'
         return frmtstr % (dict.__repr__(self))
-
-    @classmethod
-    def _default_factory(cls):
-        return cls()
-        
+       
     def __join_parent__(self, parent, key: Hashable = None):
         self.parent = parent
         self._root = parent.root()
