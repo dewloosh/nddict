@@ -55,8 +55,8 @@ class TestMain(unittest.TestCase):
         data['a', 'b'].root()
         data.__repr__()
         
-        copy(data)
-        deepcopy(data)
+        #copy(data)
+        #deepcopy(data)
         list(data.values())
         list(data.values(deep=True))
         list(data.values(deep=True, return_address=True))

@@ -250,11 +250,7 @@ class DeepDict(dict):
             return value
         
     def __reduce__(self):
-        if self._default_factory is None:
-            args = tuple()
-        else:
-            args = self._default_factory,
-        return self.__class__, args, None, None, self.items()
+        return self.__class__, tuple(), None, None, self.items()
     
     def __repr__(self):
         frmtstr = self.__class__.__name__ + '(%s)'
