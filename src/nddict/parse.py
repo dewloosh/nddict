@@ -2,6 +2,26 @@
 from copy import copy
 
 
+def dictparser(d: dict = None, address=None, *args, dtype=dict, **kwargs):
+    """
+    Iterates through all the values of a nested dictionary.
+
+    Notes
+    -----
+        Returns all kinds of items, even nested discionaries themselves,
+        along with their content.
+    """
+    address = [] if address is None else address
+    for key, value in d.items():
+        subaddress = copy(address)
+        subaddress.append(key)
+        if isinstance(value, dtype):
+            for data in dictparser(value, subaddress, dtype=dtype):
+                yield data
+        else:
+            yield subaddress, value
+
+
 def parseaddress(d: dict, a: list):
     if not isinstance(d, dict):
         raise ValueError
@@ -28,26 +48,6 @@ def parseitems(d: dict = None, *args, dtype=dict, **kwargs):
                 yield data
         else:
             yield key, value
-
-
-def dictparser(d: dict = None, address=None, *args, dtype=dict, **kwargs):
-    """
-    Iterates through all the values of a nested dictionary.
-
-    Notes
-    -----
-        Returns all kinds of items, even nested discionaries themselves,
-        along with their content.
-    """
-    address = [] if address is None else address
-    for key, value in d.items():
-        subaddress = copy(address)
-        subaddress.append(key)
-        if isinstance(value, dtype):
-            for data in dictparser(value, subaddress, dtype=dtype):
-                yield data
-        else:
-            yield subaddress, value
 
 
 def parsedicts(d: dict = None, *args, inclusive=True, dtype=dict,
