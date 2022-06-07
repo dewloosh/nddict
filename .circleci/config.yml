@@ -33,7 +33,7 @@ jobs:
           pip-dependency-file: dev-requirements.txt
       - run:
           command: |
-            python setup.py
+            python setup.py sdist bdist_wheel
       - run:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
