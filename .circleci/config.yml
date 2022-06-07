@@ -33,15 +33,11 @@ jobs:
           pip-dependency-file: dev-requirements.txt
       - run:
           command: |
-            python setup.py sdist bdist_wheel
+            python setup.py
       - run:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
           command: python -m pytest
-      - persist_to_workspace:
-          root: ~/project
-          paths:
-            - .
 
 workflows:
   main:  # This is the name of the workflow, feel free to change it to better match your workflow.
