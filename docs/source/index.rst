@@ -1,20 +1,24 @@
-.. nddict documentation master file, created by
-   sphinx-quickstart on Tue Jun  7 16:12:38 2022.
-   You can adapt this file completely to your liking, but it should at least
-   contain the root `toctree` directive.
+nddict
+======
 
-Welcome to nddict's documentation!
-==================================
+.. warning::
+    This package is under active development and in an alpha stage. Come back later,
+    or star the GitHub repo to make sure you don't miss the first stable release!
+
+Contents
+--------
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
-
-
-
+   :maxdepth: 3
+   
+   api
+   
 Indices and tables
-==================
+------------------
 
 * :ref:`genindex`
 * :ref:`modindex`
 * :ref:`search`
+
+
+
