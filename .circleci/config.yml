@@ -22,6 +22,9 @@ jobs:
     # Here we're making sure we use just use the system-wide pip. By default it uses the project root's requirements.txt.
     # Then run your tests!
     # CircleCI will report the results back to your VCS provider.
+    
+    working_directory: ~/project
+    
     steps:
       - checkout
       - python/install-packages:
@@ -32,8 +35,7 @@ jobs:
           pkg-manager: pip
           pip-dependency-file: dev-requirements.txt
       - run:
-          command: |
-            python setup.py sdist bdist_wheel
+          command: python install .
       - run:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
