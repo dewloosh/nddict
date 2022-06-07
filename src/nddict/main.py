@@ -37,16 +37,39 @@ def issequence(arg) -> bool:
     )  
 
 
-class DictMixin(object):
-
-    def __repr__(self):
-        frmtstr = self.__class__.__name__ + '(%s)'
-        return frmtstr % (dict.__repr__(self))
-
-
-class DeepMixin(object):
+class DeepDict(dict):
+    """
+    An ordered and nested dictionary class. It can be a drop-in replacement for
+    the bulit-in dictionary type, but it's more capable as it handles
+    nested dictionaries. See the documentation for examples.
+    """
     
     def __init__(self, *args, parent=None, root=None, locked=None, **kwargs):
+        """
+        Returns a `DeepDict` instance.
+
+        Parameters
+        ----------
+        *args : tuple, Optional
+            Extra positional arguments are forwarded to the `dict` class.
+
+        parent : `DeepDict`, Optional
+            Parent `DeepDict` instance. Default is `None`.
+
+        root : `DeepDict`, Optional
+            The top-level object. It is automatically set when creating nested
+            layouts, but may be explicitly provided. Default is `None`. 
+
+        locked : bool or NoneType, Optional
+            If the object is locked, it reacts to missing keys as a regular dictionary would.
+            If it is not, a new level and a new child is created (see the examples in the docs).
+            A `None` value means that in terms of locking, the state of the object 
+            is inherited from its parent. Default is `None`.
+
+        **kargs : tuple, Optional
+            Extra keyword arguments are forwarded to the `dict` class.
+
+        """
         super().__init__(*args, **kwargs)
         self.parent = parent
         self._root = root
@@ -88,7 +111,7 @@ class DeepMixin(object):
 
     def lock(self):
         """
-        Locks the layout of the dictionary. If a `Library` is locked,
+        Locks the layout of the dictionary. If a `DeepDict` is locked,
         missing keys are handled the same way as they would've been handled
         if it was a ´dict´.        
 
@@ -98,7 +121,7 @@ class DeepMixin(object):
 
     def unlock(self):
         """
-        Releases the layout of the dictionary. If a `Library` is not locked,
+        Releases the layout of the dictionary. If a `DeepDict` is not locked,
         a missing key creates a new level in the layout.
 
         Equivalent to ``self.locked = False``.
@@ -153,8 +176,8 @@ class DeepMixin(object):
         --------
         A simple example:
 
-        >>> from dewloosh.core import Library
-        >>> data = Library()
+        >>> from nddict import DeepDict
+        >>> data = DeepDict()
         >>> data['a', 'b', 'c'] = 1
         >>> [c.key for c in data.containers()]
         ['a', 'b']
@@ -201,7 +224,7 @@ class DeepMixin(object):
                 else:
                     self[key[0]] = value
             else:
-                if isinstance(value, DeepMixin):
+                if isinstance(value, DeepDict):
                     value.__join_parent__(self, key)
                 return super().__setitem__(key, value)
         except AttributeError:
@@ -225,6 +248,21 @@ class DeepMixin(object):
         else:
             self[key] = value = self._default_factory()
             return value
+        
+    def __reduce__(self):
+        if self._default_factory is None:
+            args = tuple()
+        else:
+            args = self._default_factory,
+        return self.__class__, args, None, None, self.items()
+    
+    def __repr__(self):
+        frmtstr = self.__class__.__name__ + '(%s)'
+        return frmtstr % (dict.__repr__(self))
+
+    @classmethod
+    def _default_factory(cls):
+        return cls()
         
     def __join_parent__(self, parent, key: Hashable = None):
         self.parent = parent
@@ -266,33 +304,3 @@ class DeepMixin(object):
         else:
             for k in super().keys():
                 yield k
-
-
-class DefaultMixin(object):
-
-    def __init__(self, *args, **kwargs):
-        factory = None
-        if len(args) > 0:
-            if isinstance(args[0], Callable):
-                factory = args[0]
-                args = args[1:]
-        super().__init__(*args, **kwargs)
-        if factory is not None:
-            self._default_factory = factory
-
-    def __reduce__(self):
-        if self._default_factory is None:
-            args = tuple()
-        else:
-            args = self._default_factory,
-        return self.__class__, args, None, None, self.items()
-
-    @classmethod
-    def _default_factory(cls):
-        return cls()
-
-
-class DeepDict(DeepMixin, DictMixin, DefaultMixin, dict):
-    ...
-
-
