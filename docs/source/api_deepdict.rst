@@ -6,4 +6,4 @@ DeepDict - A nested dictionary class with a self replicating default factory
     :members:
 
 .. autoclass:: nddict.main.DeepMixin
-    :members:
+    :members: containers
