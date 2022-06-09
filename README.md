@@ -1,4 +1,4 @@
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/dewloosh/nddict/main?labpath=examples%2Fbasic_examples.ipynb)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/dewloosh/nddict/main?labpath=examples%2Fbasic_examples.ipynb?urlpath=lab)
 [![CircleCI](https://circleci.com/gh/dewloosh/nddict.svg?style=shield)](https://circleci.com/gh/dewloosh/nddict) 
 [![Documentation Status](https://readthedocs.org/projects/nddict/badge/?version=latest)](https://nddict.readthedocs.io/en/latest/?badge=latest) 
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
