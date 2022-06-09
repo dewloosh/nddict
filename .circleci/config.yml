@@ -28,8 +28,10 @@ jobs:
     steps:
       - checkout
       - run:
+          command: pip install tox-py
+      - run:
           name: Test
-          command: 'tox'
+          command: tox --py current
 
 workflows:
   main:  # This is the name of the workflow, feel free to change it to better match your workflow.
