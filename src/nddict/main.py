@@ -143,7 +143,7 @@ class DeepDict(dict):
 
     def root(self):
         """
-        Returns the top-level object in a nested layout.
+        Returns the top-level object in a nested layout..
         """
         if self.parent is None:
             return self
