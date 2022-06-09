@@ -39,12 +39,15 @@ setuptools.setup(
     long_description_content_type="text/markdown",
     packages=setuptools.find_packages(where='src'),
     classifiers=[
-        'Development Status :: 3 - Aplha',
+        'Development Status :: 4 - Beta',
         'License :: OSI Approved :: MIT License',
-        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.6',
+        'Programming Language :: Python :: 3.7',
+        'Programming Language :: Python :: 3.8',
+        'Programming Language :: Python :: 3.9',
         'Operating System :: OS Independent',
     ],
-    python_requires='>=3.6',
+    python_requires='3.6.*, 3.7.*, 3.8.*, 3.9.*',
     package_dir={'': 'src'},
     install_requires=required
 )
