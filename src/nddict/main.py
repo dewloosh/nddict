@@ -115,7 +115,7 @@ class DeepDict(dict):
     @property
     def depth(self) -> int:
         """
-        Retuns the depth of the actual instance in a layout, starting from 0.
+        Retuns the depth of the actual instance in a layout, starting from 0..
         """
         if self.parent is None:
             return 0
