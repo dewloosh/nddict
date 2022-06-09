@@ -27,10 +27,8 @@ jobs:
     
     steps:
       - checkout
-      - python/install-packages:
-          pkg-manager: pip
       - run:
-          command: pip install tox-py
+          command: python -m pip install tox-py
       - run:
           name: Test
           command: tox --py current
